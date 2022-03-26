@@ -2,6 +2,7 @@ package com.example.norman_lee.myapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,12 +39,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreated executed");
         setContentView(R.layout.activity_main);
 
         //TODO 4.5 Get a reference to the sharedPreferences object
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        exchangeRate = String.valueOf(mPreferences.getString(RATE_KEY, "2.95"));
+
         //TODO 4.6 Retrieve the value using the key, and set a default when there is none
+        String onPauseExchangeRateString = mPreferences.getString(RATE_KEY, (new ExchangeRate()).getExchangeRate().toString());
+        exchangeRate = Double.valueOf(onPauseExchangeRateString);
+
+
+
 
         //TODO 3.13 Get the intent, retrieve the values passed to it, and instantiate the ExchangeRate class
         Intent intent = getIntent();
@@ -142,6 +149,18 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.set_exchange_rate){
             Intent intent = new Intent(MainActivity.this, SubActivity.class);
             startActivity(intent);
+        }
+        if (id == R.id.open_map){
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("geo").opaquePart("0.0").appendQueryParameter("q", "SUTD");
+            Uri geoLocation = builder.build();
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(geoLocation);
+
+            if(intent.resolveActivity(getPackageManager()) != null){
+                startActivity(intent);
+            }
         }
 
         return super.onOptionsItemSelected(item);

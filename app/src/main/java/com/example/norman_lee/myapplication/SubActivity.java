@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.speech.tts.UtteranceProgressListener;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,10 +28,17 @@ public class SubActivity extends AppCompatActivity {
 
 
         //TODO 4.9 Implement saving to shared preferences for the contents of the EditText widget
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        String onPauseEditTextAString = mPreferences.getString(A_KEY, "");
+        String onPauseEditTextBString = mPreferences.getString(B_KEY, "");
+
+
 
         //TODO 3.5 Get references to the editText widgets
         editTextSubValueOfA = findViewById(R.id.editTextSubValueA);
+        editTextSubValueOfA.setText(onPauseEditTextAString);
         editTextSubValueOfB = findViewById(R.id.editTextSubValueB);
+        editTextSubValueOfB.setText(onPauseEditTextBString);
         //TODO 3.6 Get a reference to the Back To Calculator Button
         buttonBackToCalculator = findViewById(R.id.buttonBackToCalculator);
         //TODO 3.7 Set up setOnClickListener
@@ -64,6 +72,15 @@ public class SubActivity extends AppCompatActivity {
     }
 
     //TODO 4.10 Don't forget to override onPause()
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+        preferencesEditor.putString(A_KEY, editTextSubValueOfA.getText().toString());
+        preferencesEditor.putString(B_KEY, editTextSubValueOfB.getText().toString());
+        preferencesEditor.apply();
+    }
 
 }
 

@@ -10,7 +10,6 @@ public class ExchangeRate {
 
     private BigDecimal exchangeRate;
     private static String defaultRate = "2.95000";
-    private static String memoryRate;
     private static final int DEFAULT_PRECISION = 5;
     private int precision = DEFAULT_PRECISION;
     private MathContext mathContext;
@@ -31,18 +30,12 @@ public class ExchangeRate {
         instantiateMathContext(DEFAULT_PRECISION);
         //TODO 3.13a The constructor initializes exchangeRate by calculating the exchangeRate
         if (home == null || foreign == null) {
-            if (memoryRate == null) {
-                exchangeRate = new BigDecimal(defaultRate);
-            }
-            else{
-                exchangeRate = new BigDecimal(memoryRate);
-            }
+            exchangeRate = new BigDecimal(defaultRate);
         }
         else{
             BigDecimal foreign_bd = new BigDecimal(foreign);
             BigDecimal home_bd = new BigDecimal(home);
             exchangeRate = foreign_bd.divide(home_bd, mathContext);
-            memoryRate = exchangeRate.toString();
         }
     }
 
