@@ -1,8 +1,11 @@
 package com.example.norman_lee.myapplication;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.speech.tts.UtteranceProgressListener;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -26,8 +29,32 @@ public class SubActivity extends AppCompatActivity {
         //TODO 4.9 Implement saving to shared preferences for the contents of the EditText widget
 
         //TODO 3.5 Get references to the editText widgets
+        editTextSubValueOfA = findViewById(R.id.editTextSubValueA);
+        editTextSubValueOfB = findViewById(R.id.editTextSubValueB);
         //TODO 3.6 Get a reference to the Back To Calculator Button
+        buttonBackToCalculator = findViewById(R.id.buttonBackToCalculator);
         //TODO 3.7 Set up setOnClickListener
+        buttonBackToCalculator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String editTextA = editTextSubValueOfA.getText().toString();
+                String editTextB = editTextSubValueOfB.getText().toString();
+
+                try {
+                    Utils.checkInvalidInputs(editTextA);
+                    Utils.checkInvalidInputs(editTextB);
+                }
+                catch(Exception e){
+                    editTextA = null;
+                    editTextB = null;
+                }
+
+                Intent intent = new Intent(SubActivity.this, MainActivity.class);
+                intent.putExtra(A_KEY, editTextA);
+                intent.putExtra(B_KEY, editTextB);
+                startActivity(intent);
+            }
+        });
         //TODO 3.8 Obtain the values stored in the editTextWidgets
         //TODO 3.9 Check that these values are valid --> See the Utils class
         //TODO 3.10 Set up an explicit intent and pass the exchange rate back to MainActivity
@@ -39,3 +66,4 @@ public class SubActivity extends AppCompatActivity {
     //TODO 4.10 Don't forget to override onPause()
 
 }
+
